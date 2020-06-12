@@ -1,16 +1,13 @@
 <template>
     <div>
-        <h4>Pick a language</h4>
-        <a href="#" v-on:click="changeToRs">RS</a>
-        <a href="#" v-on:click="changeToEn">EN</a>
-            <div v-if="rsLanguage">
+        <!-- <router-link to="/en/videos"> EN </router-link> -->
+        <!-- <router-link to="/rs/videos"> RS </router-link> -->
                 <div class="header-color">
-                <h1>{{translations.mainHeading.rs}} ({{ $route.params.lang }})</h1>
-                
+                <h1>{{translations.mainHeading[this.lang]}} ({{ $route.params.lang }})</h1>
                 <h2>{{translations.listOfVideos[this.lang]}}</h2>
                 </div>
                 <ul>
-                    <li v-for="(video, index) in videos.rs" v-bind:key="index">
+                    <li v-for="(video, index) in videos[this.lang]" v-bind:key="index">
                         <img :src="generateThumbnailUrl(video.id)" alt="picture">
                         <h3 v-on:click="toggleModal(video.id)">
                             {{video.title}}
@@ -22,28 +19,6 @@
                 <div v-on:click="toggleModal" v-if="showModal" id="modal">
                     <iframe width="560" height="315" :src="embedVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
-            </div>
-            <div v-if="enLanguage">
-                <div class="header-color">
-                <h1>{{translations.mainHeading.en}} (en)</h1>
-                
-                <h2>{{translations.listOfVideos.en}}</h2>
-                </div>
-                <ul>
-                    <li v-for="(video, index) in videos.en" v-bind:key="index">
-                        <img :src="generateThumbnailUrl(video.id)" alt="picture">
-                        
-                        <h3 v-on:click="toggleModal(video.id)">
-                            {{video.title}}
-                        </h3>
-                        
-                    </li>
-                </ul>
-
-                <div v-on:click="toggleModal" v-if="showModal" id="modal">
-                    <iframe width="560" height="315" :src="embedVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-            </div>
     </div>
 </template>
 
@@ -57,6 +32,8 @@ export default {
            embedVideo: null,
            enLanguage: false,
            rsLanguage: false,
+           cookieLang: null,
+           cookieObj: null,
            videos: {
                en: [
                     {
@@ -163,6 +140,10 @@ export default {
             }
 
                 
+        },
+        mounted() {
+            this.cookieObj = new this.$cookie;
+            this.cookieObj.create('language', this.lang, 10);
         }
 }
 </script>
@@ -171,7 +152,7 @@ export default {
 ul {
     padding: 0;
     width: 800px;
-    list-style-type: none;
+    list-style-type: none;  
     text-align: left;
     margin: 0 auto;
     background: #FAD698;
