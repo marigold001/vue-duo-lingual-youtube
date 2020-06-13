@@ -1,7 +1,5 @@
 <template>
     <div>
-        <!-- <router-link to="/en/videos"> EN </router-link> -->
-        <!-- <router-link to="/rs/videos"> RS </router-link> -->
                 <div class="header-color">
                 <h1>{{translations.mainHeading[this.lang]}} ({{ $route.params.lang }})</h1>
                 <h2>{{translations.listOfVideos[this.lang]}}</h2>
